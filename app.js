@@ -1,6 +1,7 @@
 const config = require("./utils/config");
 const express = require("express");
 require("express-async-errors");
+const process = require("process");
 const app = express();
 const cors = require("cors");
 const blogRouter = require("./controllers/blogs");
@@ -23,7 +24,9 @@ app.use(cors());
 app.use(express.static("frontend/dist"));
 app.use(express.json());
 app.use(middleware.requestLogger);
-
+app.get("/health", (req, res) => {
+  res.status(200).send();
+});
 app.use("/api/login", loginRouter);
 app.use(middleware.tokenExtractor);
 app.use("/api/users", usersRouter);

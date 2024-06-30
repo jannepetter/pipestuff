@@ -6,7 +6,9 @@
     "test": "NODE_ENV=test node --test --test-concurrency=1",
     "dev": "NODE_ENV=development nodemon index.js",
     "start": "NODE_ENV=production node index.js",
-    "start:test": "NODE_ENV=test node index.js"
+    "start:test": "NODE_ENV=test node index.js",
+    "lint": "eslint --fix ./*.js",
+    "build:front": "cd frontend && npm run build && cd .."
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +23,9 @@
     "mongoose": "^8.4.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.6.0",
+    "eslint": "^9.6.0",
+    "globals": "^15.6.0",
     "nodemon": "^3.1.0",
     "supertest": "^7.0.0"
   }
