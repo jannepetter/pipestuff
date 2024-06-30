@@ -29,6 +29,8 @@ jobs:
   build_and_run_tests:
     timeout-minutes: 5
     runs-on: ubuntu-20.04
+    env:
+      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -45,8 +47,6 @@ jobs:
 
       - name: start test env
         run: npm run start:test & sleep 5
-        env:
-          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
 
       - name: run backend tests
         run: npm run test
