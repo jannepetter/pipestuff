@@ -30,4 +30,7 @@ module.exports = {
     "react/prop-types": 0,
     "no-unused-vars": 0,
   },
+  globals: {
+    process: "readonly",
+  },
 };
