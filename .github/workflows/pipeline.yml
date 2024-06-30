@@ -44,7 +44,7 @@ jobs:
         run: cd frontend && npm run lint && cd ..
 
       - name: start test env
-        run: npm run start:test
+        run: npm run start:test & sleep 5
         env:
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
 
