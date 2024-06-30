@@ -45,6 +45,8 @@ jobs:
 
       - name: start test env
         run: npm run start:test
+        env:
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
 
       - name: run backend tests
         run: npm run test
