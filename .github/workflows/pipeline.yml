@@ -9,7 +9,6 @@ on:
     types: [opened, synchronize]
 
 jobs:
-
   check_skip_tag:
     runs-on: ubuntu-20.04
     outputs:
@@ -55,21 +54,21 @@ jobs:
       - name: run frontend tests
         run: cd frontend && npm run test && cd ..
 
-  #     - if: github.event_name == 'push' && needs.check_skip_tag.outputs.should_skip == 'false'
-  #       name: deploy to render
-  #       run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+      - if: github.event_name == 'push' && needs.check_skip_tag.outputs.should_skip == 'false'
+        name: deploy to render
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
 
-  # tag_release:
-  #   needs: [build_and_run_tests, check_skip_tag]
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - if: github.event_name == 'push' && needs.check_skip_tag.outputs.should_skip == 'false'
-  #       name: Bump version and push tag
-  #       uses: anothrNick/github-tag-action@1.67.0
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         DEFAULT_BUMP: patch
+  tag_release:
+    needs: [build_and_run_tests, check_skip_tag]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - if: github.event_name == 'push' && needs.check_skip_tag.outputs.should_skip == 'false'
+        name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.67.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
 
   # notify_job:
   #   needs: [build_and_run_tests, tag_release]
