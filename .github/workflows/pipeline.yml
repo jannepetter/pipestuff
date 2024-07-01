@@ -55,10 +55,6 @@ jobs:
       - name: run frontend tests
         run: cd frontend && npm run test && cd ..
 
-      - if: github.event_name == 'push' && needs.check_skip_tag.outputs.should_skip == 'false'
-        name: deploy to render
-        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-
   tag_release:
     needs: [build_and_run_tests, check_skip_tag]
     runs-on: ubuntu-20.04
@@ -70,6 +66,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+
+  deploy_to_render:
+    needs: [build_and_run_tests, tag_release, check_skip_tag]
+    runs-on: ubuntu-20.04
+    steps:
+      - if: github.event_name == 'push' && needs.check_skip_tag.outputs.should_skip == 'false' && needs.build_and_run_tests.result == 'success'
+        name: deploy to render
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
 
   # notify_job:
   #   needs: [build_and_run_tests, tag_release]
