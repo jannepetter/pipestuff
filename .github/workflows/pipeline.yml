@@ -82,7 +82,7 @@ jobs:
     steps:
       - name: Build Failure
         uses: rjstone/discord-webhook-notify@v1
-        if: needs.build_and_run_tests.result == 'failure' || needs.tag_release == 'failure'
+        if: needs.build_and_run_tests.result == 'failure' || needs.tag_release.result == 'failure'
         with:
           severity: error
           details: Build Failed!
@@ -90,7 +90,7 @@ jobs:
 
       - name: Build Success
         uses: rjstone/discord-webhook-notify@v1
-        if: needs.build_and_run_tests.result == 'success' && needs.tag_release == 'success'
+        if: needs.build_and_run_tests.result == 'success' && needs.tag_release.result == 'success'
         with:
           severity: info
           details: Build Succeeded!
