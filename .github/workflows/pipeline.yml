@@ -75,23 +75,23 @@ jobs:
         name: deploy to render
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
 
-  # notify_job:
-  #   needs: [build_and_run_tests, tag_release]
-  #   runs-on: ubuntu-20.04
-  #   if: always()
-  #   steps:
-  #     - name: Build Failure
-  #       uses: rjstone/discord-webhook-notify@v1
-  #       if: needs.build_and_run_tests.result == 'failure' || needs.tag_release == 'failure'
-  #       with:
-  #         severity: error
-  #         details: Build Failed!
-  #         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+  notify_job:
+    needs: [build_and_run_tests, tag_release]
+    runs-on: ubuntu-20.04
+    if: always()
+    steps:
+      - name: Build Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: needs.build_and_run_tests.result == 'failure' || needs.tag_release == 'failure'
+        with:
+          severity: error
+          details: Build Failed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
-  #     - name: Build Success
-  #       uses: rjstone/discord-webhook-notify@v1
-  #       if: needs.build_and_run_tests.result == 'success' || needs.tag_release == 'success'
-  #       with:
-  #         severity: info
-  #         details: Build Succeeded!
-  #         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Build Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: needs.build_and_run_tests.result == 'success' && needs.tag_release == 'success'
+        with:
+          severity: info
+          details: Build Succeeded!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
