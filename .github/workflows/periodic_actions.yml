@@ -7,9 +7,9 @@ name: Periodic actions
 on:
   push:
     branches:
-      - nonexistingbranch
+      - notexistingbranch
   pull_request:
-    branches: [nonexistingbranch]
+    branches: [notexistingbranch]
     types: [opened, synchronize]
 
 jobs:
